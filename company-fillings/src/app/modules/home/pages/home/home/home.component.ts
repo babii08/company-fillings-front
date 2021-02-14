@@ -1,4 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Company } from '../company.dto';
+import { CompanyService } from '../company.service';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +10,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  public companies: Company[];
+  constructor(private companyService: CompanyService ) { }
 
   ngOnInit(): void {
+    this.getCompanies();
   }
 
+  public getCompanies(): void {
+    this.companyService.getCompanies().subscribe(
+      (response: Company[]) => {
+        this.companies = response;
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    )
+  }
 }
